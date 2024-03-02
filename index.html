@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet"
+          href="style.css"/>
+</head>
+<body>
+<div class="container">
+    <h4>YOUR BALANCE</h4>
+    <h1 id="balance">$0.00</h1>
+    <div class="inc-exp-container">
+        <div class="income">
+            <h4>INCOME</h4>
+            <p class="money money-ld">$0.00</p>
+        </div>
+        <div class="expense">
+            <h4>EXPENSE</h4>
+            <p class="money money-rd">$0.00</p>
+        </div>
+    </div>
+    <h3>History</h3>
+    <ul id="list" class="list"></ul>
+    <h3>Add new transaction</h3>
+    <from class="from">
+        <div class="from-tb">
+            <label for="text">Text</label>
+            <input type="text" placeholder="enter text..." id="text">
+        </div>
+        <div class="form-db">
+            <label for="amount">AmountAmount <br/>
+                (navigate - expense, positive - income)</label>
+            <input type="number" placeholder="enter amount..." id="amount">
+        </div>
+        <button class="btn">Add transaction</button>
+    </from>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>
