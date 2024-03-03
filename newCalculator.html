@@ -1,0 +1,49 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+  
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, 
+                                   initial-scale=1.0"> 
+    <title>The Investment Calculator</title> 
+    <link rel="stylesheet" href="newCalculatorStyle.css"> 
+</head> 
+  
+<body> 
+    <div class="container"> 
+        <h1>Investment Calculator</h1> 
+        <div class="input-container"> 
+            <label for="initial-investment"> 
+                  Principal ($): 
+              </label> 
+            <input type="number"
+                   id="initial-investment" 
+                   placeholder="Enter principal"> 
+        </div> 
+        <div class="input-container"> 
+            <label for="interest-rate"> 
+                  Annual Interest Rate (%): 
+              </label> 
+            <input type="number" 
+                   id="interest-rate"
+                   placeholder="Enter interest rate"> 
+        </div> 
+        <div class="input-container"> 
+            <label for="investment-years"> 
+                  Number of Years: 
+              </label> 
+            <input type="number"
+                   id="investment-years"
+                   placeholder="Enter number of years"> 
+        </div> 
+        <button id="calculate-button"> 
+              Calculate 
+          </button> 
+        <div id="result" 
+             class="result-container"> 
+          </div> 
+    </div> 
+    <script src="function.js"></script> 
+</body> 
+  
+</html>
