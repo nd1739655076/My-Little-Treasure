@@ -1,6 +1,10 @@
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const username = urlParams.get('username');
+console.log("passed username="+username);
 document.addEventListener('DOMContentLoaded', () => {
     const greetingBar = document.getElementById('greeting-bar');
-    var username = localStorage.getItem('username');
+    // var username = localStorage.getItem('username');
     const hours = new Date().getHours();
     let greeting;
 
@@ -49,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
         card.addEventListener('click', () => {
-            const page = card.getAttribute('data-page'); // 使用data-page属性指定URL
+            const page = card.getAttribute('data-page') + "?username=" + encodeURIComponent(username); // 使用data-page属性指定URL
             if (page) {
                 window.location.href = page; // 导航到指定页面
             }
