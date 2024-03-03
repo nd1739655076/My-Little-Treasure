@@ -16,8 +16,7 @@ function checkUser() {
         const user = JSON.parse(userStr);
         if (user[1] === password) {
             console.log("username exist:"+user[0]+", password corrext:"+user[1]);
-            
-            window.location.href = "./dashboard.html"; //TODO:jump to dashboard
+            window.location.href = "./dashboard.html?username=" + encodeURIComponent(name); //TODO:jump to dashboard
         } else {
             console.log("username exist:"+user[0]+", password wrong:"+user[1]);
             setTimeout(function() {
@@ -25,6 +24,5 @@ function checkUser() {
             outputElement.textContent = "Invalid username or password.";
             console.log("1 second has passed");}, 100);
         }
-
     }
 }
