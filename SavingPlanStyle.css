@@ -1,0 +1,47 @@
+table {
+    border-collapse: collapse;
+    width: 100%;
+
+}
+
+body {
+    background-color: lavenderblush;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #FFB6C1;
+}
+
+.bigTitle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    color: hotpink;
+    font-size: 45px;
+}
+
+#data-table {
+    background-color: #FFE4E1;
+}
+
+.headerRow {
+    background-color: #FFB6C1;
+    font-size: 20px;
+}
+
+#add-row-btn {
+    margin-top: 10px;
+    font-size: 20px;
+    border: 2px solid rgb(245, 160, 193);
+    background-color: #fdc5da;
+    color: rgba(227, 72, 150, 0.87);
+    border-radius: 10px;
+}
+
