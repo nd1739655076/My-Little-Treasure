@@ -2,6 +2,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const addRowBtn = document.getElementById("add-row-btn");
     const dataTable = document.getElementById("data-table");
 
+    // Placeholder for the current user's username
+    // Replace this with the actual method to obtain the username
+    const currentUsername = 'currentUser'; 
+
     // Function to add a new row to the table
     function addRow(rowData = ['', '', '', 'day']) {
         const newRow = dataTable.insertRow();
@@ -21,22 +25,22 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
     }
 
-    // Load data from local storage and populate the table
+    // Load data from local storage for the current user and populate the table
     function loadData() {
-        const dataStr = localStorage.getItem('myData');
+        const dataStr = localStorage.getItem(currentUsername + '_myData'); // Use username as part of the key
         if (dataStr) {
             const data = JSON.parse(dataStr);
             data.forEach(rowData => addRow(rowData));
         }
     }
 
-    // Save table data to local storage
+    // Save table data to local storage for the current user
     function saveData() {
         const data = [...dataTable.rows].slice(1).map(row => {
             const inputs = row.querySelectorAll('input, select');
             return Array.from(inputs).map(input => input.value);
         });
-        localStorage.setItem('myData', JSON.stringify(data));
+        localStorage.setItem(currentUsername + '_myData', JSON.stringify(data)); // Use username as part of the key
     }
 
     // Event listener for adding a new row
@@ -54,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     dataTable.addEventListener('input', saveData);
 
-    // Initial load of stored data
+    // Initial load of stored data for the current user
     loadData();
 });
 
