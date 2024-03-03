@@ -1,10 +1,20 @@
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const username = urlParams.get('username');
+console.log("passed username="+username);
+
 document.addEventListener('DOMContentLoaded', function() {
     const addRowBtn = document.getElementById("add-row-btn");
     const dataTable = document.getElementById("data-table");
-    const currentUsername = 'currentUser'; // 示例中使用静态用户名，实际应用中应动态获取
+    
 
     // 添加新行到表格
-    function addRow(rowData = ['', '', '', 'day']) {
+    function addRow(param1, param2, param3, param4) {
+        // if (param1 === null) {
+        //     param1 = '';
+        // }
+        var rowData=[param1,param2,param3,param4];
+        console.log("rowData=",rowData);
         const newRow = dataTable.insertRow();
         newRow.innerHTML = `
             <td><input type='text' value='${rowData[0]}'></td>
@@ -24,29 +34,33 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 从 localStorage 加载用户数据
     function loadData() {
-        let userData = localStorage.getItem(currentUsername);
+        let userData = localStorage.getItem(username);
         if (userData) {
             userData = JSON.parse(userData);
-            if (userData.data && Array.isArray(userData.data)) {
-                userData.data.forEach(rowData => addRow(rowData));
+            var data = userData[5];
+            if (Array.isArray(data) && data.length !== 0) {
+                data.forEach(rowData => addRow(rowData[0],rowData[1],rowData[2],rowData[3]));
             }
         }
     }
 
     // 将用户数据保存到 localStorage
     function saveData() {
-        let userData = localStorage.getItem(currentUsername);
-        userData = userData ? JSON.parse(userData) : {username: currentUsername, password: '', budget: 0, expense: 0, balance: 0, data: []};
-        userData.data = [...dataTable.rows].slice(1).map(row => {
+        let userString = localStorage.getItem(username);
+        let userData = JSON.parse(userString); // 默认值
+        var data = userData[5];
+        console.log("5th data:"+data);
+        data = [...dataTable.rows].slice(1).map(row => {
             const inputs = row.querySelectorAll('input, select');
             return Array.from(inputs).map(input => input.value);
         });
-        localStorage.setItem(currentUsername, JSON.stringify(userData));
+        userData[5] = data;
+        localStorage.setItem(username, JSON.stringify(userData));
     }
 
     // 事件监听器：添加新行
     addRowBtn.addEventListener("click", function() {
-        addRow();
+        addRow('','','','day');
         saveData(); // 确保每次添加新行时数据都被保存
     });
 
@@ -63,7 +77,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 页面加载完成时加载数据
     loadData();
+
+    // 页面关闭或刷新前保存数据
+    window.addEventListener('beforeunload', saveData());
 });
 
-// 页面关闭或刷新前保存数据
-window.addEventListener('beforeunload', saveData);
