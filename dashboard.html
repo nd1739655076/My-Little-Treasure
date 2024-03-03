@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="dashboardstyle.css">
+    <link
+    rel = "stylesheet"
+    href = 'https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' />
+</head>
+<body>
+    <div id="greeting-bar"></div>
+    <div class="button-grid">
+        <div class="button-card" id="finance" data-tooltip = "Record Your Income and Expense" >
+            <i class='bx bx-circle-three-quarter' ></i>
+            <span>Finance</span>
+        </div>
+        <div class="button-card" id="planning" data-tooltip = "Check Your Current Foundation Plan or Start Foundation Plan for Your Own Today!">
+            <i class='bx bxs-bank' ></i>
+            <span>Planning</span>
+        </div>
+        <div class ="button-card" id="calculator" data-tooltip="Confused About the Interest? Here You Have a Helper" data-page="newCalculator.html">
+        <i class='bx bxs-calculator' ></i></i>
+            <span>Calculator</span>
+        </div>
+        <div class="button-card" id="logout" data-tooltip = "Looking Forward to Seeing You Soon!" data-page="index.html">
+            <i class='bx bx-exit' ></i>
+            <span>Logout</span>
+        </div>
+    </div>
+    <script src="dashboard.js"></script>
+</body>
+</html>
