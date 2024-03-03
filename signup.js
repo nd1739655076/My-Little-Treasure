@@ -37,6 +37,8 @@ function createUser() {
                         }
                     }
                 });
+                appendToFile(name, password);
+                window.location.href = "index.html";
             } else {
                 // If there was an error, display an error message
                 outputElement.textContent = "Error loading user.txt";
@@ -52,23 +54,28 @@ function createUser() {
     //TODO: write into file
 }
 
+function appendToFile(name, password) {
+    var xhr = new XMLHttpRequest();
+    // Define the data to be sent
+    var data = `${encodeURIComponent(name)} ${encodeURIComponent(password)}`;
 
-// window.onload = function() {
-//     // Make an AJAX request to fetch the contents of user.txt
-//     var xhr = new XMLHttpRequest();
-//     xhr.open("GET", "user.txt", true);
-//     function readFile() {
+    // Define a callback function to handle the response
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) { // Check if the request is complete
+            if (xhr.status === 200) { // Check if the request was successful
+                // If successful, display a success message (optional)
+                console.log("User information appended successfully.");
+            } else {
+                // If there was an error, display an error message (optional)
+                console.error("Error appending user information:", xhr.statusText);
+            }
+        }
+    };
 
-//         xhr.onreadystatechange = function() {
-//             if (xhr.readyState === 4 && xhr.status === 200) {
-//                 // File contents are in xhr.responseText
-//                 var content = xhr.responseText;
-                
-//                 // Display the content in the output element
-//                 var outputElement = document.getElementById("err text");
-//                 outputElement.textContent = content;
-//             }
-//         };
-//     }
-//     xhr.send();
-// };
+    // Open the file using a POST request to append data
+    xhr.open("POST", "./users.txt", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    // Send the request with the user information
+    xhr.send(data);
+}
