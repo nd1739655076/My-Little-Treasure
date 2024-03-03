@@ -1,104 +1,61 @@
-document.getElementById("add-row-btn").addEventListener("click", function() {
-    var table = document.getElementById("data-table");
-    var newRow = table.insertRow(table.rows.length);
-    var cell1 = newRow.insertCell(0);
-    var cell2 = newRow.insertCell(1);
-    var cell3 = newRow.insertCell(2);
-    var cell4 = newRow.insertCell(3);
-    var cell5 = newRow.insertCell(4); // Add new cell for the delete button
+document.addEventListener('DOMContentLoaded', function() {
+    const addRowBtn = document.getElementById("add-row-btn");
+    const dataTable = document.getElementById("data-table");
 
-
-    cell1.innerHTML = "<input type='text'>";
-    cell2.innerHTML = "<input type='number'>";
-    cell3.innerHTML = "<input type='number'>";
-    cell4.innerHTML = "<select>" +
-        "<option value='day'>Day</option>" +
-        "<option value='week'>Week</option>" +
-        "<option value='month'>Month</option>" +
-        "<option value='year'>Year</option>" +
-        "</select>";
-    cell5.innerHTML = "<button class='delete-row-btn'>Delete</button>"; // Add delete button
-
-});
-
-// Add event listener for delete row buttons using event delegation
-document.getElementById("data-table").addEventListener("click", function(event) {
-    if (event.target.classList.contains("delete-row-btn")) {
-        var row = event.target.closest("tr");
-        row.parentNode.removeChild(row); // Remove the row when the delete button is clicked
+    // Function to add a new row to the table
+    function addRow(rowData = ['', '', '', 'day']) {
+        const newRow = dataTable.insertRow();
+        newRow.innerHTML = `
+            <td><input type='text' value='${rowData[0]}'></td>
+            <td><input type='number' value='${rowData[1]}'></td>
+            <td><input type='number' value='${rowData[2]}'></td>
+            <td>
+                <select>
+                    <option value='day' ${rowData[3] === 'day' ? 'selected' : ''}>Day</option>
+                    <option value='week' ${rowData[3] === 'week' ? 'selected' : ''}>Week</option>
+                    <option value='month' ${rowData[3] === 'month' ? 'selected' : ''}>Month</option>
+                    <option value='year' ${rowData[3] === 'year' ? 'selected' : ''}>Year</option>
+                </select>
+            </td>
+            <td><button class='delete-row-btn'>Delete</button></td>
+        `;
     }
-});
 
-//here
-
-// 保存数据到 LocalStorage
-function saveData() {
-    var table = document.getElementById("data-table");
-    var data = [];
-    for (var i = 1; i < table.rows.length; i++) { // 假设第一行是标题行，从第二行开始
-        var row = table.rows[i];
-        var rowData = [];
-        for (var j = 0; j < row.cells.length - 1; j++) { // 假设最后一个单元格是删除按钮，不保存
-            var input = row.cells[j].querySelector('input, select');
-            rowData.push(input ? input.value : '');
+    // Load data from local storage and populate the table
+    function loadData() {
+        const dataStr = localStorage.getItem('myData');
+        if (dataStr) {
+            const data = JSON.parse(dataStr);
+            data.forEach(rowData => addRow(rowData));
         }
-        tableData.push(rowData);
     }
-    // 获取已存在的数组
-    var existingDataStr = localStorage.getItem(user); //!!! need to be change
-    var existingData;
-    if (existingDataStr) {
-        existingData = JSON.parse(existingDataStr);
-    } else {
-        // 如果不存在，则创建一个新的数组
-        existingData = [];
-    }
-    existingData[5] = tableData;
-}
-function addRow(rowData) {
-    var table = document.getElementById("data-table");
-    var newRow = table.insertRow();
-    var cell1 = newRow.insertCell(0);
-    var cell2 = newRow.insertCell(1);
-    var cell3 = newRow.insertCell(2);
-    var cell4 = newRow.insertCell(3);
-    var cell5 = newRow.insertCell(4);
 
-    cell1.innerHTML = "<input type='text' value='" + rowData[0] + "'>";
-    cell2.innerHTML = "<input type='number' value='" + rowData[1] + "'>";
-    cell3.innerHTML = "<input type='number' value='" + rowData[2] + "'>";
-    cell4.innerHTML = "<select><option value='day'>Day</option><option value='week'>Week</option><option value='month'>Month</option><option value='year'>Year</option></select>";
-    cell5.innerHTML = "<button class='delete-row-btn'>Delete</button>";
-
-    // Set the select value to match rowData
-    var select = cell4.querySelector("select");
-    select.value = rowData[3];
-}
-
-// 从 LocalStorage 加载数据
-function loadData() {
-    const dataStr = localStorage.getItem('myData');
-    if (dataStr) {
-        const data = JSON.parse(dataStr);
-        data.forEach(rowData => {
-            addRow(rowData);
+    // Save table data to local storage
+    function saveData() {
+        const data = [...dataTable.rows].slice(1).map(row => {
+            const inputs = row.querySelectorAll('input, select');
+            return Array.from(inputs).map(input => input.value);
         });
+        localStorage.setItem('myData', JSON.stringify(data));
     }
-}
 
+    // Event listener for adding a new row
+    addRowBtn.addEventListener("click", function() {
+        addRow();
+    });
 
-// 在页面加载完成后加载数据
-document.addEventListener('DOMContentLoaded', loadData);
+    // Event delegation for deleting a row and saving data on input/select change
+    dataTable.addEventListener("click", function(event) {
+        if (event.target.classList.contains("delete-row-btn")) {
+            event.target.closest("tr").remove();
+            saveData();
+        }
+    });
 
+    dataTable.addEventListener('input', saveData);
 
-document.getElementById("data-table").addEventListener('input', function(event) {
-    if (event.target.tagName === 'INPUT' || event.target.tagName === 'SELECT') {
-        saveData();
-    }
+    // Initial load of stored data
+    loadData();
 });
 
-
-window.addEventListener('beforeunload', function(event) {
-    saveData();
-    // 根据需要，您可以在这里添加离开页面的确认逻辑
-});
+window.addEventListener('beforeunload', saveData); // Save data when the page is being unloaded
