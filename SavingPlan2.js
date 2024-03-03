@@ -1,12 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     const addRowBtn = document.getElementById("add-row-btn");
     const dataTable = document.getElementById("data-table");
+    const currentUsername = 'currentUser'; // 示例中使用静态用户名，实际应用中应动态获取
 
-    // Placeholder for the current user's username
-    // Replace this with the actual method to obtain the username
-    const currentUsername = 'currentUser'; 
-
-    // Function to add a new row to the table
+    // 添加新行到表格
     function addRow(rowData = ['', '', '', 'day']) {
         const newRow = dataTable.insertRow();
         newRow.innerHTML = `
@@ -25,41 +22,48 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
     }
 
-    // Load data from local storage for the current user and populate the table
+    // 从 localStorage 加载用户数据
     function loadData() {
-        const dataStr = localStorage.getItem(currentUsername + '_myData'); // Use username as part of the key
-        if (dataStr) {
-            const data = JSON.parse(dataStr);
-            data.forEach(rowData => addRow(rowData));
+        let userData = localStorage.getItem(currentUsername);
+        if (userData) {
+            userData = JSON.parse(userData);
+            if (userData.data && Array.isArray(userData.data)) {
+                userData.data.forEach(rowData => addRow(rowData));
+            }
         }
     }
 
-    // Save table data to local storage for the current user
+    // 将用户数据保存到 localStorage
     function saveData() {
-        const data = [...dataTable.rows].slice(1).map(row => {
+        let userData = localStorage.getItem(currentUsername);
+        userData = userData ? JSON.parse(userData) : {username: currentUsername, password: '', budget: 0, expense: 0, balance: 0, data: []};
+        userData.data = [...dataTable.rows].slice(1).map(row => {
             const inputs = row.querySelectorAll('input, select');
             return Array.from(inputs).map(input => input.value);
         });
-        localStorage.setItem(currentUsername + '_myData', JSON.stringify(data)); // Use username as part of the key
+        localStorage.setItem(currentUsername, JSON.stringify(userData));
     }
 
-    // Event listener for adding a new row
+    // 事件监听器：添加新行
     addRowBtn.addEventListener("click", function() {
         addRow();
+        saveData(); // 确保每次添加新行时数据都被保存
     });
 
-    // Event delegation for deleting a row and saving data on input/select change
+    // 事件监听器：通过事件委托处理删除按钮的点击事件
     dataTable.addEventListener("click", function(event) {
         if (event.target.classList.contains("delete-row-btn")) {
             event.target.closest("tr").remove();
-            saveData();
+            saveData(); // 删除行后保存数据
         }
     });
 
+    // 为input和select元素的变化保存数据
     dataTable.addEventListener('input', saveData);
 
-    // Initial load of stored data for the current user
+    // 页面加载完成时加载数据
     loadData();
 });
 
-window.addEventListener('beforeunload', saveData); // Save data when the page is being unloaded
+// 页面关闭或刷新前保存数据
+window.addEventListener('beforeunload', saveData);
