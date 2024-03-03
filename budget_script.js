@@ -1,3 +1,7 @@
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const username = urlParams.get('username');
+console.log("passed username="+username);
 document.addEventListener('DOMContentLoaded', function() {
     const totalAmountButton = document.getElementById("total-amount-button");
     const checkAmountButton = document.getElementById("check-amount");
@@ -8,8 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const expenditureValueDisplay = document.getElementById("expenditure-value");
     const balanceAmountDisplay = document.getElementById("balance-amount");
     
-    // 假设username是已知的
-    const username = 'knownUsername';
+
 
     // 初始化显示
     function initialize() {
