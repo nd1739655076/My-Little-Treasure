@@ -25,28 +25,34 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // 更新预算并重新计算余额
-    function updateBudget(newBudget) {
+    // 更新数据
+    function updateData(newBudget, newExpense) {
         let dataString = localStorage.getItem(username);
-        if (dataString) {
-            let data = JSON.parse(dataString);
-            if (data && data.length >= 5) {
-                // 更新预算
-                data[2] = newBudget;
-                // 重新计算余额
-                data[4] = newBudget - data[3]; // 假设data[3]是开销
-                // 保存更新后的数据
-                localStorage.setItem(username, JSON.stringify(data));
-            }
-        }
+        let data = dataString ? JSON.parse(dataString) : [username, '', 0, 0, 0]; // 默认值
+        data[2] = newBudget !== null ? newBudget : data[2];
+        data[3] = newExpense !== null ? (parseFloat(data[3]) + newExpense) : data[3];
+        data[4] = data[2] - data[3]; // 更新余额
+        localStorage.setItem(username, JSON.stringify(data));
     }
 
+    // 设置预算
     totalAmountButton.addEventListener("click", function() {
         const totalAmount = parseFloat(totalAmountInput.value);
         if (!isNaN(totalAmount) && totalAmount > 0) {
-            updateBudget(totalAmount);
+            updateData(totalAmount, null); // 仅更新预算
             initialize(); // 刷新显示
             totalAmountInput.value = ''; // 清除输入
+        }
+    });
+
+    // 添加开销
+    checkAmountButton.addEventListener("click", function() {
+        const userAmount = parseFloat(userAmountInput.value);
+        if (!isNaN(userAmount) && userAmount > 0) {
+            updateData(null, userAmount); // 仅添加开销
+            initialize(); // 刷新显示
+            userAmountInput.value = ''; // 清除输入
+            productTitleInput.value = ''; // 清除输入
         }
     });
 
